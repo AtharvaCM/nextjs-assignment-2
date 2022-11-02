@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 
 // custom components
 import Layout from "@/components/layout";
@@ -8,7 +8,25 @@ import CardHeading from "@/components/UI/card-heading";
 import CardContent from "@/components/UI/card-content";
 import Avatar from "@/components/UI/avatar";
 
-const Home: NextPage = () => {
+import axios from "axios";
+
+type HomePageProps = {
+  data: {
+    source: {
+      id: string | null;
+      name: string;
+    };
+    author: string | null;
+    title: string;
+    description: string;
+    url: string;
+    urlToImage: string;
+    publishedAt: string;
+    content: string;
+  }[];
+};
+
+const Home: NextPage<HomePageProps> = ({ data }) => {
   return (
     <Layout>
       <div id="topHeadlinesContainer" className="mx-[10%]">
@@ -18,60 +36,28 @@ const Home: NextPage = () => {
               Top Headlines in India
             </h1>
           </div>
+          {/* News Articles Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card
-              media={
-                <CardMedia
-                  src="https://flowbite.com/docs/images/blog/image-1.jpg"
-                  alt=""
-                />
-              }
-            >
-              <CardHeading title="card title" />
-              <CardContent>
-                <div className="flex items-center">
-                  <Avatar
-                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                    alt=""
-                  />
-                  <p className="ml-2">Author name</p>
-                  <p className="ml-auto">01/1/2022</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card
-              media={
-                <CardMedia
-                  src="https://flowbite.com/docs/images/blog/image-1.jpg"
-                  alt=""
-                />
-              }
-            >
-              <CardHeading title="card title" />
-            </Card>
-
-            <Card
-              media={
-                <CardMedia
-                  src="https://flowbite.com/docs/images/blog/image-1.jpg"
-                  alt=""
-                />
-              }
-            >
-              <CardHeading title="card title" />
-            </Card>
-
-            <Card
-              media={
-                <CardMedia
-                  src="https://flowbite.com/docs/images/blog/image-1.jpg"
-                  alt=""
-                />
-              }
-            >
-              <CardHeading title="card title" />
-            </Card>
+            {data.map((article, index) => (
+              <Card
+                key={index}
+                media={
+                  <CardMedia src={article.urlToImage} alt={article.title} />
+                }
+              >
+                <CardHeading title={article.title} />
+                <CardContent>
+                  <div className="flex items-center">
+                    <Avatar
+                      src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                      alt=""
+                    />
+                    <p className="ml-2">{article.author}</p>
+                    <p className="ml-auto">{article.publishedAt}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </div>
@@ -80,3 +66,15 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const url: string = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${process.env.newsAPIKey}`;
+  const response = await axios.get(url);
+  const newsArticlesArray = response.data.articles;
+
+  return {
+    props: {
+      data: newsArticlesArray,
+    },
+  };
+};
