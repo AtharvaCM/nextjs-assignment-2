@@ -1,6 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
 
-// custom components
 import Layout from "@/components/layout";
 import Card from "@/components/UI/card";
 import CardMedia from "@/components/UI/card-media";
@@ -8,9 +7,10 @@ import CardHeading from "@/components/UI/card-heading";
 import CardContent from "@/components/UI/card-content";
 import Avatar from "@/components/UI/avatar";
 
-import { clipString } from "@/utils/index";
+import { clipString, sanitizeString } from "@/utils/index";
 
 import axios from "axios";
+import Link from "next/link";
 
 type HomePageProps = {
   data: {
@@ -47,14 +47,18 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
                 media={
                   <CardMedia
                     src={article.urlToImage}
-                    alt={article.title}
+                    alt={sanitizeString(article.title)}
                     defaultSrc="https://flowbite.com/docs/images/blog/image-1.jpg"
                   />
                 }
               >
-                <CardHeading title={clipString(article.title, 50)} />
+                <Link href={`/news/${article.title}`}>
+                  <a>
+                    <CardHeading title={clipString(article.title, 50)} />
+                  </a>
+                </Link>
                 <CardContent>
-                  <div className="mt-aut w-full">
+                  <div className="mt-auto w-full">
                     <div className="flex items-center">
                       <Avatar
                         src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
@@ -79,7 +83,7 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const url: string = `https://newsapi.org/v2/top-headlines?country=in&pageSize=9&page=1&apiKey=${process.env.newsAPIKey}`;
+  const url: string = `https://newsapi.org/v2/top-headlines?country=in&pageSize=12&page=1&apiKey=${process.env.newsAPIKey}`;
   const response = await axios.get(url);
   const newsArticlesArray = response.data.articles;
 
