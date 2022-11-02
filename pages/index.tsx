@@ -8,6 +8,8 @@ import CardHeading from "@/components/UI/card-heading";
 import CardContent from "@/components/UI/card-content";
 import Avatar from "@/components/UI/avatar";
 
+import { clipString } from "@/utils/index";
+
 import axios from "axios";
 
 type HomePageProps = {
@@ -45,7 +47,7 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
                   <CardMedia src={article.urlToImage} alt={article.title} />
                 }
               >
-                <CardHeading title={article.title} />
+                <CardHeading title={clipString(article.title, 50)} />
                 <CardContent>
                   <div className="flex items-center">
                     <Avatar
@@ -53,7 +55,9 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
                       alt=""
                     />
                     <p className="ml-2">{article.author}</p>
-                    <p className="ml-auto">{article.publishedAt}</p>
+                    <p className="ml-auto">
+                      {article.publishedAt.slice(0, 10)}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
