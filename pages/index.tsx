@@ -54,15 +54,17 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
               >
                 <CardHeading title={clipString(article.title, 50)} />
                 <CardContent>
-                  <div className="flex items-center">
-                    <Avatar
-                      src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                      alt=""
-                    />
-                    <p className="ml-2">{article.author}</p>
-                    <p className="ml-auto">
-                      {article.publishedAt.slice(0, 10)}
-                    </p>
+                  <div className="mt-aut w-full">
+                    <div className="flex items-center">
+                      <Avatar
+                        src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                        alt=""
+                      />
+                      <p className="ml-2">{clipString(article.author, 15)}</p>
+                      <p className="ml-auto">
+                        {article.publishedAt.slice(0, 10)}
+                      </p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -85,5 +87,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       data: newsArticlesArray,
     },
+    revalidate: 10,
   };
 };

@@ -7,9 +7,9 @@ type CardProps = {
 
 const Card: React.FC<CardProps> = ({ children, media = null }) => {
   return (
-    <div className="w-full rounded-lg border bg-white shadow-md dark:border-gray-300 dark:bg-gray-700">
+    <div className="flex flex-col w-full rounded-lg border bg-white shadow-md dark:border-gray-300 dark:bg-gray-700">
       {media}
-      <div className="flow-root p-4">{children}</div>
+      <div className="flex flex-col p-4 flex-1">{children}</div>
     </div>
   );
 };
