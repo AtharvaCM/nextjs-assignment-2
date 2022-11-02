@@ -40,7 +40,7 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
             </h1>
           </div>
           {/* News Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
             {data.map((article, index) => (
               <Card
                 key={index}
@@ -79,7 +79,7 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const url: string = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${process.env.newsAPIKey}`;
+  const url: string = `https://newsapi.org/v2/top-headlines?country=in&pageSize=9&page=1&apiKey=${process.env.newsAPIKey}`;
   const response = await axios.get(url);
   const newsArticlesArray = response.data.articles;
 
