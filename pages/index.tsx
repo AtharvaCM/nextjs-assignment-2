@@ -33,6 +33,7 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
     <Layout>
       <div id="topHeadlinesContainer" className="mx-[10%]">
         <div className="mx-auto max-w-[1024px]">
+          {/* Title */}
           <div className="my-6 flex items-center justify-center">
             <h1 className="text-4xl font-extrabold text-black" role="heading">
               Top Headlines in India
@@ -44,7 +45,11 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
               <Card
                 key={index}
                 media={
-                  <CardMedia src={article.urlToImage} alt={article.title} />
+                  <CardMedia
+                    src={article.urlToImage}
+                    alt={article.title}
+                    defaultSrc="https://flowbite.com/docs/images/blog/image-1.jpg"
+                  />
                 }
               >
                 <CardHeading title={clipString(article.title, 50)} />
