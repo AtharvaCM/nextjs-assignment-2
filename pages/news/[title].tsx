@@ -27,11 +27,39 @@ type SingleNewsPageProps = {
 const SingleNewsPage: NextPage<SingleNewsPageProps> = ({ newsArticle }) => {
   return (
     <Layout>
-      <p>Author: {newsArticle?.author}</p>
-      <p>Title: {newsArticle?.title}</p>
-      <p>Content: {newsArticle?.content}</p>
-      <p>Description: {newsArticle?.description}</p>
       <p>{isEmpty(newsArticle) && "Cannot fetch article"}</p>
+
+      <div className="mx-[10%] my-10">
+        <article className="format lg:format-lg max-w-none">
+          <h1>{newsArticle?.title}</h1>
+          <p className="leading-tight">
+            {newsArticle?.author && `By ${newsArticle?.author}`}
+          </p>
+          {/* <div className="flex">
+            <img
+              className="max-w-xl h-auto rounded-lg shadow-xl dark:shadow-gray-800"
+              src={newsArticle?.urlToImage}
+              alt="image description"
+            />
+            <p className="lead mx-5">{newsArticle?.description}</p>
+          </div> */}
+          <figure>
+            <img
+              className="w-full h-auto rounded-lg shadow-xl dark:shadow-gray-800"
+              src={newsArticle?.urlToImage}
+              alt={newsArticle?.title}
+            />
+          </figure>
+          <p className="lead mx-8">{newsArticle?.description}</p>
+          <p>{newsArticle?.content}</p>
+          <a
+            href={newsArticle?.url}
+            className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          >
+            Read more
+          </a>
+        </article>
+      </div>
     </Layout>
   );
 };
