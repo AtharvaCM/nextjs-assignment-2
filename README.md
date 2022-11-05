@@ -43,9 +43,6 @@ Build news web application using NextJS + REST. It should have page for Top head
 
 - **Top Headlines** : This will give you list of makes ( Car Manufacturers )
 Endpoint : [getAllMakes](https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json)
-- **Models for Make** :
-This will give you list of models for particular make. We need to pass make name we got from makes API instead of `make-name`  
-Endpoint : [getModelsForMake](https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/bmw?format=json)
 
 ### Reference Material
 
