@@ -13,12 +13,13 @@ const CardMedia: React.FC<CardMediaProps> = ({ src, alt, defaultSrc }) => {
   };
 
   return (
-    <figure className="h-[13rem]">
+    <figure className="h-[13rem]" role={"figure"}>
       <img
         className="rounded-t-lg h-full w-full"
         src={src ? src : defaultSrc}
         alt={alt}
         onError={handleImgLoadError}
+        role={"img"}
       />
     </figure>
   );
