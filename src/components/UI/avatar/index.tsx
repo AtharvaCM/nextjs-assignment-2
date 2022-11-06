@@ -8,7 +8,7 @@ type AvatarProps = {
 const Avatar: React.FC<AvatarProps> = ({ src, alt }) => {
   return (
     <div className="flex-shrink-0">
-      <img className="w-8 h-8 rounded-full" src={src} alt={alt} />
+      <img className="w-8 h-8 rounded-full" role={"img"} src={src} alt={alt} />
     </div>
   );
 };
