@@ -50,8 +50,11 @@ const SingleNewsPage: NextPage<SingleNewsPageProps> = ({ newsArticle }) => {
               alt={newsArticle?.title}
             />
           </figure>
-          <p className="lead mx-8">{newsArticle?.description}</p>
-          <p>{newsArticle?.content}</p>
+          <p
+            className="lead mx-8"
+            dangerouslySetInnerHTML={{ __html: newsArticle?.description }}
+          ></p>
+          <p dangerouslySetInnerHTML={{ __html: newsArticle?.content }}></p>
           <a
             href={newsArticle?.url}
             className="no-underline inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
