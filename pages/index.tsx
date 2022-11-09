@@ -30,7 +30,7 @@ const Home: NextPage<HomePageProps> = ({ initialNewsArticles }) => {
   const [newsArticles, setNewsArticles] =
     useState<NewsArticle[]>(initialNewsArticles);
   const [page, setPage] = useState<number>(1);
-  const [loaded, setLoaded] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(true);
 
   const handleLoadMore = () => {
     setLoaded(false);
