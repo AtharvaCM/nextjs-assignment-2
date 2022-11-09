@@ -1,34 +1,60 @@
 import type { GetStaticProps, NextPage } from "next";
-
-import Layout from "@/components/layout";
-import Card from "@/components/UI/card";
-import CardMedia from "@/components/UI/card-media";
-import CardHeading from "@/components/UI/card-heading";
-import CardContent from "@/components/UI/card-content";
-import Avatar from "@/components/UI/avatar";
-
-import { clipString, sanitizeString } from "@/utils/index";
+import { useEffect, useState } from "react";
 
 import axios from "axios";
-import Link from "next/link";
 
-type HomePageProps = {
-  data: {
-    source: {
-      id: string | null;
-      name: string;
-    };
-    author: string | null;
-    title: string;
-    description: string;
-    url: string;
-    urlToImage: string;
-    publishedAt: string;
-    content: string;
-  }[];
+import Layout from "@/components/layout";
+import NewsArticlesList from "@/components/NewsArticlesList";
+import Button from "@/components/UI/button";
+import Spinner from "@/components/UI/spinner";
+
+type NewsArticle = {
+  source: {
+    id: string | null;
+    name: string;
+  };
+  author: string | null;
+  title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+  content: string;
 };
 
-const Home: NextPage<HomePageProps> = ({ data }) => {
+type HomePageProps = {
+  initialNewsArticles: NewsArticle[];
+};
+
+const Home: NextPage<HomePageProps> = ({ initialNewsArticles }) => {
+  const [newsArticles, setNewsArticles] =
+    useState<NewsArticle[]>(initialNewsArticles);
+  const [page, setPage] = useState<number>(1);
+  const [loaded, setLoaded] = useState<boolean>(false);
+
+  const handleLoadMore = () => {
+    setLoaded(false);
+
+    setPage((prevPage) => {
+      return prevPage + 1;
+    });
+
+    const url: string = `https://newsapi.org/v2/top-headlines?country=in&pageSize=12&page=${
+      page + 1
+    }&apiKey=${process.env.newsAPIKey}`;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((response) => {
+        setLoaded(true);
+        setNewsArticles((prevState) => {
+          return [...prevState, ...response.articles];
+        });
+      });
+  };
+
+  useEffect(() => {}, [page]);
+
   return (
     <Layout>
       <div id="topHeadlinesContainer" className="mx-[10%]">
@@ -40,39 +66,13 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
             </h1>
           </div>
           {/* News Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
-            {data.map((article, index) => (
-              <Card
-                key={index}
-                media={
-                  <CardMedia
-                    src={article.urlToImage}
-                    alt={sanitizeString(article.title)}
-                    defaultSrc="https://flowbite.com/docs/images/blog/image-1.jpg"
-                  />
-                }
-              >
-                <Link href={`/news/${article.title}`}>
-                  <a>
-                    <CardHeading title={clipString(article.title, 50)} />
-                  </a>
-                </Link>
-                <CardContent>
-                  <div className="mt-auto w-full">
-                    <div className="flex items-center">
-                      <Avatar
-                        src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                        alt=""
-                      />
-                      <p className="ml-2">{clipString(article.author, 15)}</p>
-                      <p className="ml-auto">
-                        {article.publishedAt.slice(0, 10)}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <NewsArticlesList newsArticles={newsArticles} />
+          {/* Load More Articles */}
+          <div className="flex justify-center mb-5">
+            <Button variant="primary" onClick={handleLoadMore}>
+              {!loaded && <Spinner />}
+              {loaded && "Load more"}
+            </Button>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      data: newsArticlesArray,
+      initialNewsArticles: newsArticlesArray,
     },
     revalidate: 10,
   };
